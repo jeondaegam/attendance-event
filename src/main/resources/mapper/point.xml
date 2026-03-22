@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "classpath:org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.attendanceevent.mapper.PointMapper">
+
+    <insert id="insertPointHistory" parameterType="com.example.attendanceevent.dto.PointHistory">
+        INSERT INTO point_history (user_id, amount, reason, attendance_log_id)
+        VALUES (#{userId}, #{amount}, #{reason}, #{attendanceLogId})
+    </insert>
+
+    <insert id="upsertUserWallet">
+        INSERT INTO user_wallet (user_id, balance, updated_at)
+        VALUES (#{userId}, #{amount}, CURRENT_TIMESTAMP)
+        ON CONFLICT (user_id) -- userid가 이미 존재하면?
+            DO UPDATE SET -- 기존 데이터를 수정해라
+                          balance = user_wallet.balance + EXCLUDED.balance,
+                          updated_at = EXCLUDED.updated_at
+    </insert>
+
+</mapper>

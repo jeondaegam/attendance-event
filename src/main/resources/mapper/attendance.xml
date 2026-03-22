@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "classpath:org/apache/ibatis/builder/xml/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.attendanceevent.mapper.AttendanceMapper">
+
+    <insert id="insertAttendance" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        /* 출석 정보 저장 */
+        INSERT INTO attendance_log (user_id, attendance_date)
+        VALUES (#{userId}, CURRENT_DATE)
+    </insert>
+
+    <select id="countTodayAttendance" resultType="int">
+        /* 오늘 출석 여부 확인 */
+        SELECT COUNT(*)
+        FROM attendance_log
+        WHERE user_id = #{userId}
+          AND attendance_date = CURRENT_DATE
+    </select>
+
+    <select id="countContinuousAttendance" resultType="int">
+        /* 연속 출석 일수 계산: 오늘 출석이 완료된 직후에만 호출한다.*/
+        WITH RECURSIVE days AS (
+            -- 1. 오늘 날짜부터 시작
+            SELECT CURRENT_DATE AS check_date
+            UNION ALL
+            -- 2. 하루씩 빼면서 기록이 있는지 확인 (연속되지 않으면 멈춤)
+            SELECT (check_date - INTERVAL '1 day')::DATE
+            FROM days
+            WHERE EXISTS (
+                SELECT 1 FROM attendance_log
+                WHERE user_id = #{userId}
+                  AND attendance_date = (check_date - INTERVAL '1 day')::DATE
+            )
+        )
+        SELECT COUNT(*) FROM days;
+    </select>
+
+</mapper>
