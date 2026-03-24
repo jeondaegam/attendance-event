@@ -12,4 +12,7 @@ public interface PointMapper {
 
     // 잔액 업데이트
     void upsertUserWallet(@Param("userId") Long userId, @Param("amount") int amount);
+
+    // 현재 잔액 조회
+    int getBalance(Long userId);
 }

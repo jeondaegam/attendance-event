@@ -17,4 +17,10 @@
                           updated_at = EXCLUDED.updated_at
     </insert>
 
+    <select id="getBalance" resultType="Integer">
+        SELECT COALESCE(SUM(balance), 0)
+        FROM user_wallet
+        WHERE user_id = #{userId}
+    </select>
+
 </mapper>

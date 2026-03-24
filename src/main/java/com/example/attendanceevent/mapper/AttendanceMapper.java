@@ -15,5 +15,6 @@ public interface AttendanceMapper {
     /** 연속 출석 일수 계산 */
     int countContinuousAttendance(Long userId);
 
-
+    /** 마지막 출석일 조회 */
+    String getLastAttendanceDate(Long userId);
 }
