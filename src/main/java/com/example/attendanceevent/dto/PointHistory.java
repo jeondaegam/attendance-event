@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Description("포인트 적립 및 사용 이력")
-@NoArgsConstructor // ?
+@NoArgsConstructor
 public class PointHistory {
 
     private Long id;
