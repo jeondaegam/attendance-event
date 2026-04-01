@@ -18,20 +18,12 @@ public class MyPageController {
     public ResponseEntity<?> getMyPage(HttpSession session) {
         // getMyPage(@SessionAttribute("USER_PK") Long userId)
 
-        // 1. 세션에서 "USER_PK" 값 꺼내기
-        Object userPkObj = session.getAttribute("USER_PK");
+        // 세션에서 "USER_PK" 값 꺼내기
+        // 인터셉터가 로그인 안한 유저는 이미 걸러줬기 때문에, 세션이 있다고 믿고 바로 꺼내면 OK
+        Long userId = (Long) session.getAttribute("USER_PK");
 
-        // 2. 로그인 안 한 유저 체크
-        if (userPkObj == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요한 서비스입니다. \uD83D\uDE22");
-        }
-
-        // 3. Object 타입을 Long으로 형변환
-        Long userId = (Long) userPkObj;
-
-        // 4. 안전하게 꺼낸 PK로 마이페이지 정보 조회
-        MyPageResponse response = myPageService.getMyInfo(userId);
-        return ResponseEntity.ok(response);
+        // 2. PK로 마이페이지 정보 조회
+        return ResponseEntity.ok(myPageService.getMyInfo(userId));
 
     }
 
