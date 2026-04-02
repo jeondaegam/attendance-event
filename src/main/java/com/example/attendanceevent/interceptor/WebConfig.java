@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor // 이 클래스에서 필요한 객체를 new 키워드 없이 자동으로 생성해주는 녀석?
 // Interceptor를 어떤 주소(URL)에 적용할지 설정한다.
 public class WebConfig implements WebMvcConfigurer {
