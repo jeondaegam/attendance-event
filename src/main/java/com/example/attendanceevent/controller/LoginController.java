@@ -21,7 +21,6 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
-//        User user = userService.authenticate(loginRequest.getLoginId(), loginRequest.getPassword());
         User user = userService.login(loginRequest.getLoginId(), loginRequest.getPassword());
 
         if (user != null) {
