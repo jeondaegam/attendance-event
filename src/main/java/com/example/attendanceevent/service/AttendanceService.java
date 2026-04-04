@@ -4,6 +4,7 @@ import com.example.attendanceevent.dto.Attendance;
 import com.example.attendanceevent.dto.PointHistory;
 import com.example.attendanceevent.mapper.AttendanceMapper;
 import com.example.attendanceevent.mapper.PointMapper;
+import com.example.attendanceevent.policy.AttendanceReward;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
@@ -40,12 +41,13 @@ public class AttendanceService {
     private String processReward(Long userId, int days, Long attendanceId) {
         String message = "출석 완료! 현재 " + days + "일 연속 출석 중입니다.\n";
 
-        if (days == 7) {
-            int amount = 1000;
-            String reason = "7일 연속 출석";
-            rewardPoint(userId, amount, reason, attendanceId);
-            message += "\uD83D\uDE4C7일 연속 달성! 1,000 포인트 지급!\uD83D\uDE4C";
+        AttendanceReward reward = AttendanceReward.findByDays(days);
+
+        if (reward != AttendanceReward.NONE) {
+            rewardPoint(userId, reward.getAmount(), reward.getReason(), attendanceId);
+            message += "🎉 " + reward.getReason() + "! " + reward.getAmount() + "포인트 지급! 🎉";
         }
+
         return message;
     }
 
