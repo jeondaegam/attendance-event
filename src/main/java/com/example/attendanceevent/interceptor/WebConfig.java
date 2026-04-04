@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginCheckInterceptor)
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/users/join", "/api/public/**"); // 로그인 체크가 필요 없는 페이지를 추가
+                .excludePathPatterns("/api/member/login", "/users/join", "/api/public/**"); // 로그인 체크가 필요 없는 페이지를 추가
     }
 
     // 인터셉터를 2개이상 추가하고싶으면?

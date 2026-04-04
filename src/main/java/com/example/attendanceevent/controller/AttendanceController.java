@@ -1,24 +1,26 @@
 package com.example.attendanceevent.controller;
 
 import com.example.attendanceevent.service.AttendanceService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/attendance")
 public class AttendanceController {
     private final AttendanceService attendanceService;
 
-    @GetMapping("/check/{userId}")
-    public String checkIn(@PathVariable Long userId) {
+    @PostMapping("/api/attendance")
+    public ResponseEntity<String> checkIn(HttpSession session) {
+        Long userId = (Long) session.getAttribute("USER_PK");
+
         try {
-            return attendanceService.markAttendance(userId);
+            String result = attendanceService.markAttendance(userId);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
-            return e.getMessage(); // service단에서 넘겨주는 에러 메시지를 화면에 보여줌
+            return ResponseEntity.badRequest().body(e.getMessage());
+//                    e.getMessage(); // service단에서 넘겨주는 에러 메시지를 화면에 보여줌
         }
     }
 }
